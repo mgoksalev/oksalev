@@ -10,13 +10,13 @@
 
 Vá em **Configurações → Sobre o telefone** e clique 7 vezes em **Número da build** até ativar o modo desenvolvedor.
 
-![Ativar opção desenvolvedor](imagens/opcao.jpg)
+![Ativar opção desenvolvedor](images/opcao.jpg)
 
 ### 2️⃣ Ativar restrições do processo secundário
 
 Dentro de **Configurações → Opções do desenvolvedor**, ative a opção **"Restrições do processo secundário"**.
 
-![Ativar restrições](imagens/ativar.jpg)
+![Ativar restrições](images/ativar.jpg)
 
 ### 3️⃣ Baixar os apps necessários
 
