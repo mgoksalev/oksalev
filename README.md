@@ -4,6 +4,35 @@
 
 ---
 
+## 📱 Passo a passo antes de começar
+
+### 1️⃣ Ativar opções do desenvolvedor
+
+Vá em **Configurações → Sobre o telefone** e clique 7 vezes em **Número da build** até ativar o modo desenvolvedor.
+
+![Ativar opção desenvolvedor](imagens/opcao.jpg)
+
+### 2️⃣ Ativar restrições do processo secundário
+
+Dentro de **Configurações → Opções do desenvolvedor**, ative a opção **"Restrições do processo secundário"**.
+
+![Ativar restrições](imagens/ativar.jpg)
+
+### 3️⃣ Baixar os apps necessários
+
+- **Termux** (versão F-Droid, NÃO use a da Play Store):  
+  👉 https://f-droid.org/repo/com.termux_118.apk
+
+- **Termux:X11** (para exibir o desktop):  
+  👉 https://f-droid.org/repo/com.termux.x11_12.apk
+
+### 4️⃣ Instalar git dentro do Termux
+
+Abra o Termux e digite:
+
+```bash
+pkg install git
+
 ## O que é isso?
 
 Um script `install.sh` que transforma seu **Termux** em um desktop **XFCE** rodando em dispositivos **ARM64** (a maioria dos celulares Android).
