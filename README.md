@@ -26,7 +26,7 @@ Dentro de **Configurações → Opções do desenvolvedor**, ative a opção **"
 - **Termux:X11** (para exibir o desktop):  
   👉 https://github.com/termux/termux-x11/releases/tag/nightly
 
-### 4️⃣ Instalar git dentro do Termux
+### 4️⃣ Instalar o git dentro do Termux
 
 Abra o Termux e digite:
 
@@ -57,7 +57,7 @@ chmod +x install.sh
 Depois da instalação, inicie o desktop com:
 
 ```bash
-./start.sh
+cd && ./start.sh
 ```
 
 ### 6️⃣ Requisitos
