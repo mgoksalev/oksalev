@@ -63,6 +63,7 @@ Depois da instalação, inicie o desktop com:
 ### 6️⃣ Requisitos
 
 · Android 8 ou superior
+
 · Termux instalado (versão F-Droid)
-· Processador ARM64
-· ~2GB RAM de espaço livre
+
+· 2GB RAM de espaço livre
