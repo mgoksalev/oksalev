@@ -24,7 +24,7 @@ Dentro de **Configurações → Opções do desenvolvedor**, ative a opção **"
   👉 https://f-droid.org/repo/com.termux_118.apk
 
 - **Termux:X11** (para exibir o desktop):  
-  👉 https://f-droid.org/repo/com.termux.x11_12.apk
+  👉 https://github.com/termux/termux-x11/releases/tag/nightly
 
 ### 4️⃣ Instalar git dentro do Termux
 
