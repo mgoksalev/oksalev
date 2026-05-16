@@ -32,22 +32,37 @@ Abra o Termux e digite:
 
 ```bash
 pkg install git
+```
 
-## O que é isso?
+### 5️⃣ O que é isso?
 
-Um script `install.sh` que transforma seu **Termux** em um desktop **XFCE** rodando em dispositivos **ARM64** (a maioria dos celulares Android).
+Um script install.sh que transforma seu Termux em um desktop XFCE rodando em dispositivos ARM64 (a maioria dos celulares Android).
 
-## O que o script faz?
+O que o script faz?
 
 1. Atualiza o Termux
 2. Instala o XFCE (ambiente desktop)
 3. Configura o básico para rodar
 4. Deixa tudo pronto pra usar
 
-## Como usar
+Como usar
 
 ```bash
 git clone https://github.com/mgoksalev/oksalev
 cd oksalev
 chmod +x install.sh
 ./install.sh
+```
+
+Depois da instalação, inicie o desktop com:
+
+```bash
+./start.sh
+```
+
+### 6️⃣ Requisitos
+
+· Android 8 ou superior
+· Termux instalado (versão F-Droid)
+· Processador ARM64
+· ~2GB RAM de espaço livre
