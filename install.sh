@@ -1,19 +1,13 @@
 #!/data/data/com.termux/files/usr/bin/bash
 termux-setup-storage
 export DEBIAN_FRONTEND=noninteractive
-instalar_com_progresso() { local pkg="$1"; local step="$2"; local total="$3"; echo -n "[$step/$total] Instalando: $pkg ... "; apt-get install -y -q -o Dpkg::Options::="--force-confnew" "$pkg" 2>&1 | while read line; do if echo "$line" | grep -q "Get:[0-9]* http"; then local perc=$(echo "$line" | grep -o '[0-9]*%' | head -1); if [ -n "$perc" ]; then echo -ne "\r[$step/$total] Instalando: $pkg ... $perc   "; fi; fi; done; wait $!; echo -e "\r[$step/$total] Instalando: $pkg ... OK   "; }
-clear
-echo "========================================="
-echo "              OKSALEV"
-echo "========================================="
-echo ""
 apt-get update -y -q 2>&1 >/dev/null
-echo "[1/16] Repositorios atualizados"
+echo "[1/15] Repositorios atualizados"
 apt-get upgrade -y -q -o Dpkg::Options::="--force-confnew" 2>&1 >/dev/null
-echo "[2/16] Sistema atualizado"
-PACKAGES="x11-repo tur-repo termux-x11-nightly xorg-xrandr xfce4 xfce4-terminal mesa-zink vulkan-loader-android virglrenderer-mesa-zink virglrenderer-android pulseaudio pulseaudio-utils dbus chromium hangover-wine hangover-wowbox64 sox"
+echo "[2/15] Sistema atualizado"
+PACKAGES="x11-repo tur-repo termux-x11-nightly xorg-xrandr xfce4 xfce4-terminal mesa-zink vulkan-loader-android virglrenderer-mesa-zink virglrenderer-android pulseaudio pulseaudio-utils dbus chromium hangover-wine hangover-wowbox64"
 STEP=2
-for pkg in $PACKAGES; do STEP=$((STEP + 1)); instalar_com_progresso "$pkg" "$STEP" 16; done
+for pkg in $PACKAGES; do STEP=$((STEP + 1)); echo -n "[$STEP/15] Instalando: $pkg ... "; apt-get install -y -q -o Dpkg::Options::="--force-confnew" "$pkg" 2>&1 >/dev/null; echo "OK"; done
 ln -sf /data/data/com.termux/files/usr/opt/hangover-wine/bin/wine /data/data/com.termux/files/usr/bin/wine 2>/dev/null
 chmod +x /data/data/com.termux/files/usr/bin/wine 2>/dev/null
 mkdir -p ~/.wine
@@ -57,8 +51,8 @@ export DBUS_SESSION_BUS_ADDRESS=unix:path=$PREFIX/var/run/dbus/session_bus_socke
 termux-x11 :0 -ac &> /dev/null &
 sleep 3
 export DISPLAY=:0
-startxfce4 &> /dev/null &
-sleep 8
+startxfce4 > /dev/null 2>&1 &
+sleep 5
 pactl set-default-sink AAudio_sink 2>/dev/null
 am start --user 0 -n com.termux.x11/.MainActivity 2>/dev/null
 EOFF
@@ -85,31 +79,8 @@ cat > ~/bin/wine << 'EOFF'
 GALLIUM_DRIVER=virpipe /data/data/com.termux/files/usr/opt/hangover-wine/bin/wine "$@"
 EOFF
 chmod +x ~/bin/wine
-mkdir -p ~/Desktop
-cat > ~/Desktop/terminal-acelerado.desktop << 'EOFF'
-[Desktop Entry]
-Name=Terminal Acelerado
-Exec=env GALLIUM_DRIVER=virpipe xfce4-terminal
-Type=Application
-Icon=utilities-terminal
-Categories=System;
-EOFF
-chmod +x ~/Desktop/terminal-acelerado.desktop 2>/dev/null
-cat > ~/Desktop/testar-audio << 'EOFF'
-#!/data/data/com.termux/files/usr/bin/bash
-play -n synth 2 sin 880 vol 0.5 2>/dev/null
-EOFF
-chmod +x ~/Desktop/testar-audio
-cat > ~/Desktop/audio-info << 'EOFF'
-#!/data/data/com.termux/files/usr/bin/bash
-pactl list short sinks
-echo ""
-pactl info | grep "Default Sink"
-EOFF
-chmod +x ~/Desktop/audio-info
 sed -i '/alias xfce=/d' ~/.bashrc 2>/dev/null
 sed -i '/alias xfce-stop=/d' ~/.bashrc 2>/dev/null
-sed -i 's|~/start.sh &>/dev/null &||g' ~/.bashrc 2>/dev/null
 if ! grep -q "hangover-wine/bin" ~/.bashrc 2>/dev/null; then
 echo -e "\nexport PATH=\$PATH:/data/data/com.termux/files/usr/opt/hangover-wine/bin\nexport WINEPREFIX=~/.wine" >> ~/.bashrc
 fi
