@@ -2,12 +2,12 @@
 termux-setup-storage
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -y -q 2>&1 >/dev/null
-echo "[1/15] Repositorios atualizados"
+echo "[1/14] Repositorios atualizados"
 apt-get upgrade -y -q -o Dpkg::Options::="--force-confnew" 2>&1 >/dev/null
-echo "[2/15] Sistema atualizado"
-PACKAGES="x11-repo tur-repo termux-x11-nightly xorg-xrandr xfce4 xfce4-terminal mesa-zink vulkan-loader-android virglrenderer-mesa-zink virglrenderer-android pulseaudio pulseaudio-utils dbus chromium hangover-wine hangover-wowbox64"
+echo "[2/14] Sistema atualizado"
+PACKAGES="x11-repo tur-repo termux-x11-nightly xorg-xrandr xfce4 xfce4-terminal mesa-zink virglrenderer-mesa-zink virglrenderer-android pulseaudio dbus chromium hangover-wine"
 STEP=2
-for pkg in $PACKAGES; do STEP=$((STEP + 1)); echo -n "[$STEP/15] Instalando: $pkg ... "; apt-get install -y -q -o Dpkg::Options::="--force-confnew" "$pkg" 2>&1 >/dev/null; echo "OK"; done
+for pkg in $PACKAGES; do STEP=$((STEP + 1)); echo -n "[$STEP/14] Instalando: $pkg ... "; apt-get install -y -q -o Dpkg::Options::="--force-confnew" "$pkg" 2>&1 >/dev/null; echo "OK"; done
 ln -sf /data/data/com.termux/files/usr/opt/hangover-wine/bin/wine /data/data/com.termux/files/usr/bin/wine 2>/dev/null
 chmod +x /data/data/com.termux/files/usr/bin/wine 2>/dev/null
 mkdir -p ~/.wine
@@ -52,7 +52,7 @@ termux-x11 :0 -ac &> /dev/null &
 sleep 3
 export DISPLAY=:0
 startxfce4 > /dev/null 2>&1 &
-sleep 5
+sleep 8
 pactl set-default-sink AAudio_sink 2>/dev/null
 am start --user 0 -n com.termux.x11/.MainActivity 2>/dev/null
 EOFF
