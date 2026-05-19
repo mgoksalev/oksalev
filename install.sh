@@ -1,15 +1,14 @@
 #!/data/data/com.termux/files/usr/bin/bash
 clear
 echo "╔══════════════════════════════════════════════════════════════╗"
-echo "║  ██████╗ ██╗  ██╗███████╗ █████╗ ██╗     ███████╗██╗   ██╗   ║"
-echo "║ ██╔═══██╗██║ ██╔╝██╔════╝██╔══██╗██║     ██╔════╝██║   ██║   ║"
-echo "║ ██║   ██║█████╔╝ ███████╗███████║██║     █████╗  ██║   ██║   ║"
-echo "║ ██║   ██║██╔═██╗ ╚════██║██╔══██║██║     ██╔══╝  ╚██╗ ██╔╝   ║"
-echo "║ ╚██████╔╝██║  ██╗███████║██║  ██║███████╗███████╗ ╚████╔╝    ║"
-echo "║  ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝  ╚═══╝     ║"
+echo "║  ██████╗ ██╗  ██╗███████╗ █████╗ ██╗     ███████╗██╗   ██╗      ║"
+echo "║ ██╔═══██╗██║ ██╔╝██╔════╝██╔══██╗██║     ██╔════╝██║   ██║     ║"
+echo "║ ██║   ██║█████╔╝ ███████╗███████║██║     █████╗  ██║   ██║      ║"
+echo "║ ██║   ██║██╔═██╗ ╚════██║██╔══██║██║     ██╔══╝  ╚██╗ ██╔╝      ║"
+echo "║ ╚██████╔╝██║  ██╗███████║██║  ██║███████╗███████╗ ╚████╔╝     ║"
+echo "║  ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝  ╚═══╝       ║"
 echo "╚══════════════════════════════════════════════════════════════╝"
 echo ""
-termux-setup-storage
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -y -q 2>&1 >/dev/null
 echo "[1/14] Repositorios atualizados"
@@ -34,7 +33,7 @@ load-module module-suspender
 load-module module-aaudio-sink
 set-default-sink AAudio_sink
 EOFF
-cat > ~/start.sh << 'EOFF'
+cat > ~/start.sh << 'EOF'
 #!/data/data/com.termux/files/usr/bin/bash
 exec 2>/dev/null
 exec 1>/dev/null
@@ -57,9 +56,9 @@ startxfce4 2>&1 >/dev/null &
 sleep 8
 pactl set-default-sink AAudio_sink 2>/dev/null
 am start --user 0 -n com.termux.x11/.MainActivity 2>/dev/null
-EOFF
+EOF
 chmod +x ~/start.sh
-cat > ~/stop.sh << 'EOFF'
+cat > ~/stop.sh << 'EOF'
 #!/data/data/com.termux/files/usr/bin/bash
 xfce4-session-logout --logout 2>/dev/null
 sleep 2
@@ -68,18 +67,18 @@ pkill -TERM -f "termux.x11" 2>/dev/null
 pulseaudio --kill 2>/dev/null
 killall dbus-daemon 2>/dev/null
 termux-wake-unlock 2>/dev/null
-EOFF
+EOF
 chmod +x ~/stop.sh
 mkdir -p ~/bin
-cat > ~/bin/acelerar << 'EOFF'
+cat > ~/bin/acelerar << 'EOF'
 #!/data/data/com.termux/files/usr/bin/bash
 GALLIUM_DRIVER=virpipe "$@"
-EOFF
+EOF
 chmod +x ~/bin/acelerar
-cat > ~/bin/wine << 'EOFF'
+cat > ~/bin/wine << 'EOF'
 #!/data/data/com.termux/files/usr/bin/bash
 GALLIUM_DRIVER=virpipe /data/data/com.termux/files/usr/opt/hangover-wine/bin/wine "$@"
-EOFF
+EOF
 chmod +x ~/bin/wine
 sed -i '/alias xfce=/d' ~/.bashrc 2>/dev/null
 sed -i '/alias xfce-stop=/d' ~/.bashrc 2>/dev/null
@@ -88,8 +87,7 @@ sed -i '/PULSE_SERVER/d' ~/.bashrc 2>/dev/null
 sed -i '/WINEPREFIX/d' ~/.bashrc 2>/dev/null
 sed -i '/cleanup_on_exit/d' ~/.bashrc 2>/dev/null
 sed -i '/trap cleanup_on_exit/d' ~/.bashrc 2>/dev/null
-cat >> ~/.bashrc << 'EOFF'
-
+cat > ~/.bashrc << 'EOF'
 export PATH=$PATH:/data/data/com.termux/files/usr/opt/hangover-wine/bin
 export WINEPREFIX=~/.wine
 export PULSE_SERVER=127.0.0.1
@@ -103,13 +101,15 @@ cleanup_on_exit() {
 }
 trap cleanup_on_exit EXIT
 trap cleanup_on_exit TERM HUP INT
-EOFF
+EOF
+source ~/.bashrc
+termux-setup-storage
 cd
 clear
 echo "╔══════════════════════════════════════════════════════════════╗"
-echo "║                                                              ║"
-echo "║                    INSTALAÇÃO CONCLUÍDA!                     ║"
-echo "║                                                              ║"
-echo "║                Comandos: ./start.sh  |  ./stop.sh            ║"
-echo "║                                                              ║"
+echo "║                                                                         ║"
+echo "║                            INSTALAÇÃO CONCLUÍDA!                        ║"
+echo "║                                                                         ║"
+echo "║                            cd && ./start.sh                             ║"
+echo "║                                                                         ║"
 echo "╚══════════════════════════════════════════════════════════════╝"
