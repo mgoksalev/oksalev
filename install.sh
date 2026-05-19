@@ -1,4 +1,14 @@
 #!/data/data/com.termux/files/usr/bin/bash
+clear
+echo "╔══════════════════════════════════════════════════════════════╗"
+echo "║  ██████╗ ██╗  ██╗███████╗ █████╗ ██╗     ███████╗██╗   ██╗   ║"
+echo "║ ██╔═══██╗██║ ██╔╝██╔════╝██╔══██╗██║     ██╔════╝██║   ██║   ║"
+echo "║ ██║   ██║█████╔╝ ███████╗███████║██║     █████╗  ██║   ██║   ║"
+echo "║ ██║   ██║██╔═██╗ ╚════██║██╔══██║██║     ██╔══╝  ╚██╗ ██╔╝   ║"
+echo "║ ╚██████╔╝██║  ██╗███████║██║  ██║███████╗███████╗ ╚████╔╝    ║"
+echo "║  ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝  ╚═══╝     ║"
+echo "╚══════════════════════════════════════════════════════════════╝"
+echo ""
 termux-setup-storage
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -y -q 2>&1 >/dev/null
@@ -10,22 +20,12 @@ STEP=2
 for pkg in $PACKAGES; do STEP=$((STEP + 1)); echo -n "[$STEP/14] Instalando: $pkg ... "; apt-get install -y -q -o Dpkg::Options::="--force-confnew" "$pkg" 2>&1 >/dev/null; echo "OK"; done
 ln -sf /data/data/com.termux/files/usr/opt/hangover-wine/bin/wine /data/data/com.termux/files/usr/bin/wine 2>/dev/null
 chmod +x /data/data/com.termux/files/usr/bin/wine 2>/dev/null
-mkdir -p ~/.wine
-mkdir -p ~/.config/pulse
-mkdir -p ~/.config/alsa
+mkdir -p ~/.wine ~/.config/pulse ~/.config/alsa
 cat > ~/.config/alsa/asoundrc << 'EOFF'
-pcm.pulse {
-    type pulse
-}
-ctl.pulse {
-    type pulse
-}
-pcm.!default {
-    type pulse
-}
-ctl.!default {
-    type pulse
-}
+pcm.pulse { type pulse }
+ctl.pulse { type pulse }
+pcm.!default { type pulse }
+ctl.!default { type pulse }
 EOFF
 cat > ~/.config/pulse/default.pa << 'EOFF'
 load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1
@@ -36,6 +36,8 @@ set-default-sink AAudio_sink
 EOFF
 cat > ~/start.sh << 'EOFF'
 #!/data/data/com.termux/files/usr/bin/bash
+exec 2>/dev/null
+exec 1>/dev/null
 termux-wake-lock
 pkill -f "termux.x11" 2>/dev/null
 killall dbus-daemon 2>/dev/null
@@ -48,10 +50,10 @@ export PULSE_RUNTIME_PATH=/data/data/com.termux/files/usr/var/run/pulse
 export ALSA_CONFIG_PATH=/data/data/com.termux/files/home/.config/alsa/asoundrc
 dbus-daemon --session --fork --address=unix:path=$PREFIX/var/run/dbus/session_bus_socket 2>/dev/null
 export DBUS_SESSION_BUS_ADDRESS=unix:path=$PREFIX/var/run/dbus/session_bus_socket
-termux-x11 :0 -ac &> /dev/null &
+termux-x11 :0 -ac 2>&1 >/dev/null &
 sleep 3
 export DISPLAY=:0
-startxfce4 > /dev/null 2>&1 &
+startxfce4 2>&1 >/dev/null &
 sleep 8
 pactl set-default-sink AAudio_sink 2>/dev/null
 am start --user 0 -n com.termux.x11/.MainActivity 2>/dev/null
@@ -81,14 +83,33 @@ EOFF
 chmod +x ~/bin/wine
 sed -i '/alias xfce=/d' ~/.bashrc 2>/dev/null
 sed -i '/alias xfce-stop=/d' ~/.bashrc 2>/dev/null
-if ! grep -q "hangover-wine/bin" ~/.bashrc 2>/dev/null; then
-echo -e "\nexport PATH=\$PATH:/data/data/com.termux/files/usr/opt/hangover-wine/bin\nexport WINEPREFIX=~/.wine" >> ~/.bashrc
-fi
-if ! grep -q "PULSE_SERVER=127.0.0.1" ~/.bashrc 2>/dev/null; then
-echo -e "\nexport PULSE_SERVER=127.0.0.1\nexport PULSE_RUNTIME_PATH=/data/data/com.termux/files/usr/var/run/pulse\nexport ALSA_CONFIG_PATH=/data/data/com.termux/files/home/.config/alsa/asoundrc" >> ~/.bashrc
-fi
+sed -i '/acelerar/d' ~/.bashrc 2>/dev/null
+sed -i '/PULSE_SERVER/d' ~/.bashrc 2>/dev/null
+sed -i '/WINEPREFIX/d' ~/.bashrc 2>/dev/null
+sed -i '/cleanup_on_exit/d' ~/.bashrc 2>/dev/null
+sed -i '/trap cleanup_on_exit/d' ~/.bashrc 2>/dev/null
+cat >> ~/.bashrc << 'EOFF'
+
+export PATH=$PATH:/data/data/com.termux/files/usr/opt/hangover-wine/bin
+export WINEPREFIX=~/.wine
+export PULSE_SERVER=127.0.0.1
+export PULSE_RUNTIME_PATH=/data/data/com.termux/files/usr/var/run/pulse
+export ALSA_CONFIG_PATH=/data/data/com.termux/files/home/.config/alsa/asoundrc
+
+cleanup_on_exit() {
+    if [[ -n "$DISPLAY" ]] && pgrep -f "startxfce4" >/dev/null 2>&1; then
+        ~/stop.sh 2>/dev/null || true
+    fi
+}
+trap cleanup_on_exit EXIT
+trap cleanup_on_exit TERM HUP INT
+EOFF
 cd
 clear
-echo "========================================="
-echo "INSTALACAO CONCLUIDA"
-echo "========================================="
+echo "╔══════════════════════════════════════════════════════════════╗"
+echo "║                                                              ║"
+echo "║                    INSTALAÇÃO CONCLUÍDA!                     ║"
+echo "║                                                              ║"
+echo "║                Comandos: ./start.sh  |  ./stop.sh            ║"
+echo "║                                                              ║"
+echo "╚══════════════════════════════════════════════════════════════╝"
