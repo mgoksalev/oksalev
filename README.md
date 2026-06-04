@@ -31,7 +31,7 @@ Dentro de **Configurações → Opções do desenvolvedor**, ative a opção **"
 Abra o Termux e digite:
 
 ```bash
-pkg install git
+pkg install wget
 ```
 
 ### 5️⃣ O que é isso?
@@ -48,8 +48,7 @@ O que o script faz?
 Como usar
 
 ```bash
-git clone https://github.com/mgoksalev/oksalev
-cd oksalev
+wget "https://github.com/mgoksalev/oksalev/releases/download/v1.0/install.sh"
 chmod +x install.sh
 ./install.sh
 ```
